@@ -10,7 +10,7 @@
 // thread identifiers
 pthread_t tid[NUMBER_OF_THREADS];
 // critical section lock
-pthread_mutex_t lock;
+pthread_mutex_t lock, lock2;
 // semaphores for sequential threads
 sem_t semH, semI, semM;
 
@@ -105,9 +105,6 @@ void* thread_c(void* ptr)
         pthread_mutex_unlock(&lock);
         computation();
     }
-
-    
-
     // wait for thread D to finish
     pthread_join(tid[4], NULL);
 
@@ -125,7 +122,17 @@ void* thread_d(void* ptr)
     // wait for thread E to finish
     pthread_join(tid[3], NULL);
     // wait for thread F to finish
-    pthread_join(tid[5], NULL);
+    //pthread_join(tid[5], NULL);
+
+    err = pthread_create(&tid[6], NULL, thread_k, NULL);
+    if (err != 0)
+        std::cerr << "Can't create thread. Error: " << strerror(err) << std::endl;
+    err = pthread_create(&tid[7], NULL, thread_m, NULL);
+    if (err != 0)
+        std::cerr << "Can't create thread. Error: " << strerror(err) << std::endl;
+    err = pthread_create(&tid[9], NULL, thread_h, NULL);
+    if (err != 0)
+        std::cerr << "Can't create thread. Error: " << strerror(err) << std::endl;
 
     for (int i = 0; i < 3; ++i) {
         pthread_mutex_lock(&lock);
@@ -140,23 +147,20 @@ void* thread_d(void* ptr)
     err = pthread_create(&tid[8], NULL, thread_g, NULL);
     if (err != 0)
         std::cerr << "Can't create thread. Error: " << strerror(err) << std::endl;
-    // wait for thread G to finish
-    pthread_join(tid[8], NULL);
-    // start thread G
+
 
     // wait for thread G to finish
-    //pthread_join(tid[8], NULL);
-    // wait for thread k to finish
-    //pthread_join(tid[6], NULL);
+    pthread_join(tid[8], NULL);
+    // wait for thread K to finish
+    pthread_join(tid[6], NULL);
+
+    sem_post(&semH);
     // wait for thread M to finish
     pthread_join(tid[7], NULL);
     //wait for thread H to finish
     pthread_join(tid[9], NULL);
     //wait for thread I to finish
     pthread_join(tid[10], NULL);
-
-
-    //sem_post(&semH);
     return ptr;
 }
 
@@ -169,15 +173,8 @@ void* thread_e(void* ptr)
         computation();
     }
 
-    err = pthread_create(&tid[6], NULL, thread_k, NULL);
-    if (err != 0)
-        std::cerr << "Can't create thread. Error: " << strerror(err) << std::endl;
-    err = pthread_create(&tid[7], NULL, thread_m, NULL);
-    if (err != 0)
-        std::cerr << "Can't create thread. Error: " << strerror(err) << std::endl;
-
     // wait for thread F to finish
-    //pthread_join(tid[5], NULL);
+    pthread_join(tid[5], NULL);
 
     return ptr;
 }
@@ -191,10 +188,6 @@ void* thread_f(void* ptr)
         computation();
     }
 
-    err = pthread_create(&tid[9], NULL, thread_h, NULL);
-    if (err != 0)
-        std::cerr << "Can't create thread. Error: " << strerror(err) << std::endl;
-
     return ptr;
 }
 
@@ -206,10 +199,6 @@ void* thread_g(void* ptr)
         pthread_mutex_unlock(&lock);
         computation();
     }
-    // wait for thread K to finish
-    pthread_join(tid[6], NULL);
-
-    sem_post(&semH);
     return ptr;
 }
 
@@ -223,15 +212,17 @@ void* thread_h(void* ptr)
         computation();
     }
     
-    sem_wait(&semH);
+    
     // perform computations
         for (int i = 0; i < 3; ++i) {
+        sem_wait(&semH);
         pthread_mutex_lock(&lock);
         std::cout << "h" << std::flush;
         pthread_mutex_unlock(&lock);
         computation();
+        sem_post(&semI);
     }
-    sem_post(&semI);
+    
     //sem_post(&semI);
     return ptr;
 }
@@ -246,13 +237,14 @@ void* thread_m(void* ptr)
         computation();
     }
 
-    sem_wait(&semM);
     // perform computations
     for (int i = 0; i < 3; ++i) {
+        sem_wait(&semM);
         pthread_mutex_lock(&lock);
         std::cout << "m" << std::flush;
         pthread_mutex_unlock(&lock);
         computation();
+        sem_post(&semH);
     }
 
     return ptr;
@@ -260,15 +252,17 @@ void* thread_m(void* ptr)
 
 void* thread_i(void* ptr)
 {
-    sem_wait(&semI);
+    
     // perform computations
     for (int i = 0; i < 3; ++i) {
+        sem_wait(&semI);
         pthread_mutex_lock(&lock);
         std::cout << "i" << std::flush;
         pthread_mutex_unlock(&lock);
         computation();
+        sem_post(&semM);
     }
-    sem_post(&semM);
+    
     return ptr;
 }
 
@@ -300,6 +294,10 @@ int lab2_init()
 {
     // initilize mutex
     if (pthread_mutex_init(&lock, NULL) != 0) {
+        std::cerr << "Mutex init failed" << std::endl;
+        return 1;
+    }
+    if (pthread_mutex_init(&lock2, NULL) != 0) {
         std::cerr << "Mutex init failed" << std::endl;
         return 1;
     }

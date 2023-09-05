@@ -31,7 +31,6 @@ const char* lab2_sequential_threads()
     return "him";
 }
 
-
 void* thread_b(void* ptr);
 void* thread_c(void* ptr);
 void* thread_d(void* ptr);

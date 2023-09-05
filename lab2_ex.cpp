@@ -51,8 +51,10 @@ void *thread_a(void *ptr)
     err = pthread_create(&tid[3], NULL, thread_d, NULL);
     if (err != 0)
         std::cerr << "Can't create thread. Error: " << strerror(err) << std::endl;
+    pthread_mutex_lock(&lock);
     // wait for thread D to finish
     pthread_join(tid[3], NULL);
+    pthread_mutex_unlock(&lock);
     return  ptr;
 }
 
@@ -90,8 +92,10 @@ void *thread_d(void *ptr)
         pthread_mutex_unlock(&lock);
         computation();
     }
+    pthread_mutex_lock(&lock);
     // wait for thread C to finish
     pthread_join(tid[2], NULL);
+    pthread_mutex_unlock(&lock);
     // start thread E
     err = pthread_create(&tid[4], NULL, thread_e, NULL);
     if (err != 0)
@@ -105,8 +109,10 @@ void *thread_d(void *ptr)
         computation();
         sem_post(&semE);
     }
+    pthread_mutex_lock(&lock);
     // wait for thread E to finish
     pthread_join(tid[4], NULL);
+    pthread_mutex_unlock(&lock);
     return ptr;
 }
 

@@ -1,0 +1,72 @@
+Execution #2. Output is: aaabccbcbedcfdfdfecekmdhkmhmchkddggghimhimhimnnn
+
+Unsynchronized execution test failed!
+Interval with unsynchronized threads cdef not found. None of the following intervals matched:
+aaa
+bccbcb
+edcfdfdfecek
+mdhkmhmchkddggg
+himhimhim
+nnn
+
+
+Execution #3. Output is: aaabcccbbedcfddefefckmdhkhckdmhdmggghimhimhimnnn
+
+Unsynchronized execution test failed!
+Interval with unsynchronized threads cdef not found. None of the following intervals matched:
+aaa
+bcccbb
+edcfddefefck
+mdhkhckdmhdmggg
+himhimhim
+nnn
+
+
+Execution #19. Output is: aaabccbcbecdfecfdedfkmdhcmhkmdkhdggghimhimhimnnn
+
+Unsynchronized execution test failed!
+Interval with unsynchronized threads cdef not found. None of the following intervals matched:
+aaa
+bccbcb
+ecdfecfdedfk
+mdhcmhkmdkhdggg
+himhimhim
+nnn
+
+
+Execution #40. Output is: aaabcbcbcedcffcdeefdkmdhhcmkdmdhkggghimhimhimnnn
+
+Unsynchronized execution test failed!
+Interval with unsynchronized threads cdef not found. None of the following intervals matched:
+aaa
+bcbcbc
+edcffcdeefdk
+mdhhcmkdmdhkggg
+himhimhim
+nnn
+
+
+Execution #43. Output is: aaabccbbcedcffefdcedkmdhhcmdkhdkmggghimhimhimnnn
+
+Unsynchronized execution test failed!
+Interval with unsynchronized threads cdef not found. None of the following intervals matched:
+aaa
+bccbbc
+edcffefdcedk
+mdhhcmdkhdkmggg
+himhimhim
+nnn
+
+
+Execution #85. Output is: aaabccbcbedcfedfcefdkmdhdcmkhdkhmggghimhimhimnnn
+
+Unsynchronized execution test failed!
+Interval with unsynchronized threads cdef not found. None of the following intervals matched:
+aaa
+bccbcb
+edcfedfcefdk
+mdhdcmkhdkhmggg
+himhimhim
+nnn
+
+

@@ -105,6 +105,7 @@ void* thread_c(void* ptr)
         pthread_mutex_unlock(&lock);
         computation();
     }
+
     // wait for thread D to finish
     pthread_join(tid[4], NULL);
 
@@ -121,8 +122,6 @@ void* thread_d(void* ptr)
     }
     // wait for thread E to finish
     pthread_join(tid[3], NULL);
-    // wait for thread F to finish
-    //pthread_join(tid[5], NULL);
 
     err = pthread_create(&tid[6], NULL, thread_k, NULL);
     if (err != 0)
@@ -151,8 +150,6 @@ void* thread_d(void* ptr)
 
     // wait for thread G to finish
     pthread_join(tid[8], NULL);
-    // wait for thread K to finish
-    pthread_join(tid[6], NULL);
 
     sem_post(&semH);
     // wait for thread M to finish
@@ -199,6 +196,10 @@ void* thread_g(void* ptr)
         pthread_mutex_unlock(&lock);
         computation();
     }
+
+    // wait for thread K to finish
+    pthread_join(tid[6], NULL);
+
     return ptr;
 }
 
@@ -211,8 +212,7 @@ void* thread_h(void* ptr)
         pthread_mutex_unlock(&lock);
         computation();
     }
-    
-    
+
     // perform computations
         for (int i = 0; i < 3; ++i) {
         sem_wait(&semH);
@@ -236,6 +236,7 @@ void* thread_m(void* ptr)
         pthread_mutex_unlock(&lock);
         computation();
     }
+
 
     // perform computations
     for (int i = 0; i < 3; ++i) {

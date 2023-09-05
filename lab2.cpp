@@ -105,8 +105,8 @@ void* thread_c(void* ptr)
         computation();
     }
 
-    // wait for thread D to finish
-    pthread_join(tid[4], NULL);
+    // wait for thread E to finish
+    pthread_join(tid[3], NULL);
 
     return ptr;
 }
@@ -119,8 +119,7 @@ void* thread_d(void* ptr)
         pthread_mutex_unlock(&lock);
         computation();
     }
-    // wait for thread E to finish
-    pthread_join(tid[3], NULL);
+    
 
     err = pthread_create(&tid[6], NULL, thread_k, NULL);
     if (err != 0)
@@ -183,6 +182,8 @@ void* thread_f(void* ptr)
         pthread_mutex_unlock(&lock);
         computation();
     }
+    // wait for thread D to finish
+    pthread_join(tid[4], NULL);
 
     return ptr;
 }
@@ -289,7 +290,7 @@ void* thread_n(void* ptr)
     }
     return ptr;
 }
-
+ 
 int lab2_init()
 {
     // initilize mutex
